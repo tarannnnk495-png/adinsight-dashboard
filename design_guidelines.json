@@ -1,0 +1,155 @@
+{
+  "brand_identity": {
+    "name": "AdInsight",
+    "persona": "The Strategic Lens",
+    "description": "A high-precision competitive intelligence tool for D2C marketing managers. The design language is 'Swiss Utility'—clean, objective, and information-dense, avoiding decorative fluff to focus on the ad creative and data.",
+    "emotional_tone": "Clarity, Speed, Authority",
+    "theme_strategy": "The Performance Pro (High Contrast Light Mode)",
+    "typography": {
+      "headings": {
+        "family": "Plus Jakarta Sans, sans-serif",
+        "weights": ["600", "700"],
+        "tracking": "-0.02em",
+        "usage": "Used for page titles, section headers, and metric values. Brings a geometric, modern tech feel without being 'start-up cute'."
+      },
+      "body": {
+        "family": "Inter, sans-serif",
+        "weights": ["400", "500"],
+        "usage": "Used for all data labels, ad copy, and general text. Optimized for reading at small sizes."
+      },
+      "monospace": {
+        "family": "JetBrains Mono, monospace",
+        "usage": "Used for Ad IDs, dates, and raw data views."
+      }
+    },
+    "colors": {
+      "primary": {
+        "name": "Obsidian",
+        "value": "#09090B",
+        "foreground": "#FFFFFF",
+        "usage": "Primary buttons, active states, key navigation elements."
+      },
+      "accent": {
+        "name": "Signal Blue",
+        "value": "#2563EB",
+        "foreground": "#FFFFFF",
+        "usage": "Links, selected states, 'Insight' highlights."
+      },
+      "background": {
+        "app": "#FAFAFA",
+        "surface": "#FFFFFF",
+        "subtle": "#F4F4F5"
+      },
+      "semantic": {
+        "success": "#16A34A",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "info": "#3B82F6"
+      },
+      "border": {
+        "default": "#E4E4E7",
+        "active": "#A1A1AA"
+      }
+    }
+  },
+  "layout_system": {
+    "grid_strategy": "Bento High Density",
+    "container": {
+      "max_width": "1600px",
+      "padding": "p-6 md:p-8"
+    },
+    "spacing": {
+      "section_gap": "gap-8",
+      "widget_gap": "gap-4",
+      "internal_padding": "p-5"
+    },
+    "sidebar": {
+      "width": "w-64",
+      "collapsed_width": "w-16",
+      "behavior": "Sticky, collapsible"
+    }
+  },
+  "components": {
+    "AdCard": {
+      "description": "The core unit of the application. Displays the ad creative and its metadata.",
+      "structure": "Vertical stack. Image/Video on top (aspect-ratio preserved), Metadata below.",
+      "visual_style": {
+        "bg": "bg-white",
+        "border": "border border-border",
+        "radius": "rounded-lg",
+        "shadow": "shadow-sm hover:shadow-md transition-shadow duration-200"
+      },
+      "elements": {
+        "header": "Flex row. Brand Avatar + Name + Platform Icon (FB/IG).",
+        "media": "Full width. Max height 400px. Object-cover or contain based on format.",
+        "footer": "Grid of metrics: Active Days, Start Date, Format.",
+        "actions": "Hover overlay with 'View Details' or 'Analyze' button."
+      }
+    },
+    "StatsWidget": {
+      "description": "Small cards for KPI tracking.",
+      "visual_style": "Flat white card with 1px border. No shadow.",
+      "typography": "Label is text-muted-foreground (sm). Value is text-3xl font-bold tracking-tight."
+    },
+    "Charts": {
+      "library": "Recharts (via Shadcn)",
+      "palette": ["#09090B", "#2563EB", "#16A34A", "#F59E0B", "#EF4444"],
+      "style": "Minimalist. Remove grid lines where possible. Tooltip must be high-contrast (Black bg, White text)."
+    }
+  },
+  "page_guidelines": {
+    "Dashboard": {
+      "layout": "Grid of 4 columns.",
+      "sections": [
+        { "name": "KPI Row", "span": "col-span-full", "type": "StatsWidget" },
+        { "name": "Activity Timeline", "span": "col-span-2 md:col-span-3", "type": "AreaChart" },
+        { "name": "Active Advertisers", "span": "col-span-2 md:col-span-1", "type": "BarChart (Horizontal)" },
+        { "name": "Format Distribution", "span": "col-span-1", "type": "DonutChart" },
+        { "name": "Theme Distribution", "span": "col-span-1", "type": "DonutChart" },
+        { "name": "Recent Top Ads", "span": "col-span-2", "type": "AdCard List (Horizontal Scroll)" }
+      ]
+    },
+    "AdExplorer": {
+      "layout": "Sidebar Filters (Left) + Infinite Scroll Grid (Right).",
+      "grid_cols": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+      "filters": "Sticky sidebar. Accordion style for Brand, Format, Theme, Status."
+    },
+    "AIInsights": {
+      "layout": "Single column readable stream (Medium-blog style) + Sidebar summary.",
+      "typography": "Larger body text (text-lg) for readability.",
+      "features": ["Gap Analysis Map (Radar Chart)", "Weekly Brief (Markdown Text)", "Creative Trends (Grid of example images)"]
+    }
+  },
+  "visual_enhancers": {
+    "micro_interactions": {
+      "hover": "Subtle lift (-2px) and shadow increase for clickable cards.",
+      "button": "Scale down (0.98) on click.",
+      "loading": "Skeleton loaders matching the exact shape of the content."
+    },
+    "empty_states": {
+      "style": "Minimalist line art or geometric shapes. No cartoony illustrations.",
+      "text": "Clear instruction on how to generate data (e.g., 'Sync Now to see ads')."
+    }
+  },
+  "universal_guidelines": [
+    "Do not use gradients for backgrounds. Use solid colors.",
+    "Ensure all interactive elements have data-testid attributes.",
+    "Use 'sonner' for all toast notifications.",
+    "Prefer 'Lucide React' for icons.",
+    "Charts must be accessible (use patterns or distinct colors, not just shades of one color).",
+    "Dates should be formatted as 'MMM dd, yyyy' (e.g., Oct 24, 2025).",
+    "Currency/Numbers: Use compact notation for large numbers (1.2k, 1M)."
+  ],
+  "image_urls": {
+    "logo_placeholder": "https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=200&h=200&fit=crop",
+    "ad_fallback": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80"
+  },
+  "instructions_to_main_agent": [
+    "Install 'framer-motion' for animations: `yarn add framer-motion`.",
+    "Install 'date-fns' if not present (already in package.json).",
+    "Ensure all API calls to Meta Ad Library are simulated or scraped as per user choice (Option 1: Scrape/Public Search). Do NOT implement official Meta API authentication.",
+    "Use 'localStorage' or a simple backend database to persist 'Saved Ads' if no DB is connected yet.",
+    "For the 'Sync Now' feature, show a visual progress indicator (e.g., 'Scanning 5/10 brands...').",
+    "Strictly follow the 'Forbidden' rules: No Teal (#1B93A4), No Space Grotesk font."
+  ]
+}
