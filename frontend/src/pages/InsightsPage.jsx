@@ -32,18 +32,30 @@ const ListBlock = ({ title, items, testId }) => (
 export default function InsightsPage() {
   const [insights, setInsights] = useState(null);
   const [analytics, setAnalytics] = useState(null);
+  const [syncState, setSyncState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+
+  const fetchSyncStatus = async () => {
+    try {
+      const status = await api.getSyncStatus();
+      setSyncState(status?.sync_state || null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [latestInsights, dashboard] = await Promise.all([
+      const [latestInsights, dashboard, syncStatus] = await Promise.all([
         api.getLatestInsights(),
         api.getDashboardAnalytics(90),
+        api.getSyncStatus(),
       ]);
       setInsights(latestInsights?.weekly_brief ? latestInsights : null);
       setAnalytics(dashboard);
+      setSyncState(syncStatus?.sync_state || null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -52,6 +64,11 @@ export default function InsightsPage() {
   };
 
   const onGenerateInsights = async () => {
+    if (syncState?.running) {
+      toast.info("Sync is in progress. Please generate insights once sync completes.");
+      return;
+    }
+
     setGenerating(true);
     try {
       const result = await api.generateInsights(90);
@@ -66,6 +83,9 @@ export default function InsightsPage() {
 
   useEffect(() => {
     fetchData();
+
+    const interval = setInterval(fetchSyncStatus, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -74,12 +94,25 @@ export default function InsightsPage() {
       subtitle="Generate weekly strategic briefs, detect whitespace in creative strategy, and convert observations into actions."
     >
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3" data-testid="insights-header-controls">
-        <p className="text-sm text-muted-foreground" data-testid="insights-last-updated">
-          {insights?.created_at ? `Last brief generated at ${new Date(insights.created_at).toLocaleString()}` : "No brief generated yet"}
-        </p>
-        <Button onClick={onGenerateInsights} disabled={generating} data-testid="generate-insights-button">
+        <div className="space-y-1">
+          <p className="text-sm text-muted-foreground" data-testid="insights-last-updated">
+            {insights?.created_at
+              ? `Last brief generated at ${new Date(insights.created_at).toLocaleString()}`
+              : "No brief generated yet"}
+          </p>
+          {syncState?.running ? (
+            <p className="text-xs font-medium text-amber-600" data-testid="insights-sync-warning">
+              Sync is currently running. AI brief generation will unlock after sync.
+            </p>
+          ) : null}
+        </div>
+        <Button
+          onClick={onGenerateInsights}
+          disabled={generating || syncState?.running}
+          data-testid="generate-insights-button"
+        >
           <Sparkles className="mr-2 h-4 w-4" />
-          {generating ? "Generating..." : "Generate AI Brief"}
+          {syncState?.running ? "Sync in progress" : generating ? "Generating..." : "Generate AI Brief"}
         </Button>
       </div>
 
